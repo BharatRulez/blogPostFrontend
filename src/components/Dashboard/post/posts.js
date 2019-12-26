@@ -8,6 +8,8 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import { useHistory } from 'react-router-dom'
+
 
 const useStyles = makeStyles({
   card: {
@@ -16,14 +18,32 @@ const useStyles = makeStyles({
   root: {
     flexGrow: 1,
     margin : '100px',
+   
 },
+button : {
+    float : "right",
+    margin : "40px",
+    width : "20vw"
+}
 });
 
 export default function ImgMediaCard() {
   const classes = useStyles();
+  const history = useHistory();
+  const navigateToCreatePost = (e) =>{
+    e.preventDefault()
+    if(e){
+        history.push('/posts/create')
+    }
+   
+    }
+return (
+ <>
 
-  return (
-<div className={classes.root}>      
+<div className={classes.root}> 
+<Button className = {classes.button} variant="contained" color="primary" onClick={e => navigateToCreatePost(e)}>
+  Create a new post
+</Button>     
 <Grid container spacing={1}>
     <Grid container item xs={12} spacing={3}>
     <Grid item xs={4}>
@@ -166,18 +186,20 @@ export default function ImgMediaCard() {
           </Typography>
         </CardContent>
       </CardActionArea>
-      <CardActions>
+      {/* <CardActions>
         <Button size="small" color="primary">
           Share
         </Button>
         <Button size="small" color="primary">
           Learn More
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
 </Grid>
 </Grid>
 </Grid>
 </div>
-       );
+       
+ </>     
+);
 }
