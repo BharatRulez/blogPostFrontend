@@ -13,8 +13,9 @@ const SignUp = () => {
     e.preventDefault()
     
     createUser({ fullName, email, password }).then(data => {
-      console.log(data);
+     if(!data.error)
        history.push('/login')
+       
     
     })
     }
