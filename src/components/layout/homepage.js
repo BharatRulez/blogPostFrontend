@@ -5,11 +5,12 @@ import HomePageNavbar from './homepageNavbar'
 
 const HomePage = () => {
   return (
-      <>
+    <>
     <HomePageNavbar />
+    <div className="card-container">
     <SignIn />
     <SignUp />
-
+    </div>
     </>
   )
 }

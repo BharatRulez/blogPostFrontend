@@ -10,8 +10,7 @@ const SignIn = () => {
         <div className="col-md-6 offset-md-3">
           <div className="card card-outline-secondary">
             <div className="card-header">
-            
-              <NavLink to='/login'>Login</NavLink>
+             <NavLink to='/login'>Login</NavLink>
              
             </div>
            
