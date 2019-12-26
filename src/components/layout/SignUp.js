@@ -1,23 +1,58 @@
 import React from "react";
-import { NavLink } from 'react-router-dom'
+import {
+  NavLink
+} from 'react-router-dom'
 
-const SignUp = () => {
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+// const SignUp = () => {
+//   return (
+
+
+
+//     <div class="card text-center">
+//     <div class="card-body">
+//     <NavLink to = '/signUp' > Sign Up </NavLink> 
+//     </div>
+//     </div>
+//   );
+// };
+
+// export default SignUp;
+
+
+const SignUp = makeStyles({
+  card: {
+    minWidth: '100%',
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+});
+
+export default function OutlinedCard() {
+  const classes = SignUp();
+  const bull = <span className={classes.bullet}>•</span>;
+
   return (
-    <div className="row">
-      <div className="col s12 m6">
-        <div className="col-md-6 offset-md-3">
-          <div className="card card-outline-secondary">
-            <div className="card-header">
-            
-              <NavLink to='/signUp'>Sign Up</NavLink>
-             
-            </div>
-           
-          </div>
-        </div>
-      </div>
-    </div>
+    <NavLink to = '/signUp' >
+    <Card className={classes.card} variant="outlined">
+      <CardContent>
+       SIGN UP
+      </CardContent>
+      
+    </Card>
+    </NavLink> 
   );
-};
-
-export default SignUp;
+}
