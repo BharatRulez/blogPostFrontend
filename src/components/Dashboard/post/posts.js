@@ -27,7 +27,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-
 const useStyles = makeStyles (theme => ({
   card: {
     maxWidth: 345,
