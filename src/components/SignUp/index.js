@@ -20,6 +20,11 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
+
+
+
+
+
 const SignUp = makeStyles({
   card: {
     minWidth: '200px',
@@ -54,11 +59,7 @@ const SignUp = makeStyles({
 
 export default function OutlinedCard() {
 
-  
   const classes = SignUp();
-  //const bull = <span className={classes.bullet}>•</span>;
-
-
   const [email, setEmail] = useState('')
   const [fullName, setFullName] = useState('')
   const [password, setPassword] = useState('')
@@ -73,6 +74,7 @@ export default function OutlinedCard() {
      
      })
      }
+
   const [values, setValues] = React.useState({
     amount: '',
     password: '',
@@ -109,7 +111,7 @@ export default function OutlinedCard() {
     <Card className={classes.card} variant="outlined">
     
       <CardContent>
-      <form className="form" onSubmit={e => handleSubmit(e)}  className={clsx(classes.margin, classes.withoutLabel, classes.textField)} Validate autoComplete="off" >
+      <form className="form"  onSubmit={e => handleSubmit(e)} className={clsx(classes.margin, classes.withoutLabel, classes.textField)} Validate autoComplete="off" >
       <h2 style={{textAlign:'center'}}>Sign Up</h2>
       <TextField
       className={clsx(classes.margin, classes.textField)}
@@ -119,10 +121,11 @@ export default function OutlinedCard() {
           multiline
           variant="outlined"
           onChange={e => setFullName(e.target.value)}
-               value = {fullName}
+          value = {fullName}
           />
       
       
+     
       <TextField
           id="inputEmail3"
           label="Email"
@@ -141,6 +144,8 @@ export default function OutlinedCard() {
             //id="outlined-adornment-password"
             id="inputPassword3"
             type={values.showPassword ? 'text' : 'password'}
+            value={values.password}
+            onChange={handleChange('password')}
             // value={values.password}
             // onChange={handleChange('password')}
             value={password}

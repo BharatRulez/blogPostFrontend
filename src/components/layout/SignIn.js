@@ -44,7 +44,7 @@ const SignIn = makeStyles({
 
 export default function OutlinedCard() {
   const classes = SignIn();
-  const bull = <span className={classes.bullet}>•</span>;
+  // const bull = <span className={classes.bullet}>•</span>;
 
   return (
     <NavLink to='/login'>
