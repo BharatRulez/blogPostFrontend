@@ -25,6 +25,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 
 const useStyles = makeStyles (theme => ({
@@ -233,7 +234,7 @@ return (
           <Typography className={classes.title} variant="h6" noWrap>
           Story Digital Create Blogs
           </Typography>
-          <div className={classes.search}>
+          {/* <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
@@ -245,7 +246,7 @@ return (
               }}
               inputProps={{ 'aria-label': 'search' }}
             />
-          </div>
+          </div> */}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton aria-label="show 4 new mails" color="inherit">
@@ -292,10 +293,10 @@ return (
 </Button>     
 <Grid container spacing={1}>
     <Grid container item xs={12} spacing={3}>
-    <Grid item xs={4} >
+    <Grid item xs={12} sm={4} >
 
-     <Card className={classes.card} onClick={handleOpen}>
-            <CardActionArea>
+     <Card className={classes.card} >
+            <CardActionArea onClick={handleOpen}>
         <CardMedia
           component="img"
           alt="Contemplative Reptile"
@@ -320,6 +321,12 @@ return (
         <Button size="small" color="primary">
           Learn More
         </Button>
+        <Button size="small" color="primary">
+          Delete
+        </Button>
+        {/* <IconButton aria-label="delete">
+        <DeleteIcon />
+      </IconButton> */}
       </CardActions>
       </Card>
        
@@ -366,7 +373,7 @@ return (
       
     
    </Grid>
-   <Grid item xs={4}>
+   <Grid item xs={12} sm={4}>
     <Card className={classes.card}>
       <CardActionArea>
         <CardMedia
@@ -396,7 +403,7 @@ return (
       </CardActions>
     </Card>
     </Grid>
-    <Grid item xs={4}>
+    <Grid item xs={12} sm={4}>
     <Card className={classes.card}>
       <CardActionArea>
         <CardMedia
@@ -426,7 +433,7 @@ return (
       </CardActions>
     </Card>
     </Grid>
-    <Grid item xs={4}>
+    <Grid item xs={12} sm={4}>
     <Card className={classes.card}>
       <CardActionArea>
         <CardMedia
@@ -456,7 +463,7 @@ return (
       </CardActions>
     </Card>
     </Grid>
-    <Grid item xs={4}>
+    <Grid item xs={12} sm={4}>
     <Card className={classes.card}>
       <CardActionArea>
         <CardMedia
