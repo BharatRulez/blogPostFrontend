@@ -4,6 +4,8 @@ const baseURL = 'http://localhost:9000/api/v1'
 
 const signInUserURL = `${baseURL}/usersignin`
 const createUserURL = `${baseURL}/usersignup`
+const createPostURL = `${baseURL}/post`
+
 const signInUser = user => {
     return fetch(signInUserURL, {
       method: 'POST',
@@ -32,4 +34,17 @@ const signInUser = user => {
       })
     }).then(res => res.json())
   }
-  export {signInUser,createUser};
+
+  const createPost = post => {
+    return fetch(createPostURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: post.title,
+        description: post.description,
+      })
+    }).then(res => res.json())
+  }
+  export {signInUser,createUser,createPost};

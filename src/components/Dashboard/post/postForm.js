@@ -2,22 +2,20 @@ import React from "react";
 
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { createUser } from '../../../utils/api'
+import { createPost } from '../../../utils/api'
 
 const PostForm = () => {
-    const [email, setEmail] = useState('')
-  const [fullName, setFullName] = useState('')
-  const [password, setPassword] = useState('')
+    const [description, setDescription] = useState('')
+  const [title, setTitle] = useState('')
+  
   const history  = useHistory();
   const handleSubmit = (e) =>{
     e.preventDefault()
     
-    createUser({ fullName, email, password }).then(data => {
+    createPost({ title, description }).then(data => {
      if(!data.error)
-       history.push('/login')
-       
-    
-    })
+       history.push('/posts')
+     })
     }
   return (
       <>
@@ -29,7 +27,7 @@ const PostForm = () => {
 
       <div className="card card-outline-secondary">
         <div className="card-header">
-          <h3 className="mb-0">Sign Up</h3>
+          <h3 className="mb-0">Create a new post here</h3>
         </div>
         <div className="card-body">
           <form className="form" onSubmit={e => handleSubmit(e)}>
@@ -37,38 +35,29 @@ const PostForm = () => {
               <input
                 type="text"
                 className="form-control"
-                onChange={e => setFullName(e.target.value)}
-               value = {fullName}
-                placeholder="Full name"
+                onChange={e => setTitle(e.target.value)}
+               value = {title}
+                placeholder="Title"
               />
             </div>
             <div className="form-group">
               <input
-                type="email"
+                type="text"
                 className="form-control"
-              value= {email}
-              onChange={e => setEmail(e.target.value)}
-                placeholder="Email"
+              value= {description}
+              onChange={e => setDescription(e.target.value)}
+                placeholder="Description"
                 required=""
               />
             </div>
-            <div className="form-group">
-              <input
-                type="password"
-                className="form-control"
-               value={password}
-               onChange={e => setPassword(e.target.value)}
-                placeholder="Password"
-                required=""
-              />
-            </div>
+            
 
             <div className="form-group">
               <button
                 type="submit"
                 className="btn btn-success btn-lg float-right"
               >
-                Register
+                Create Post
               </button>
             </div>
           </form>

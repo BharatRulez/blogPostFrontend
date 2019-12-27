@@ -63,7 +63,11 @@ const handleSubmit = (e) =>{
   
   signInUser({ userEmail, userPassword }).then(data => {
     console.log(data);
-    
+    const { token, user } = data
+    localStorage.setItem('user_id', user._id)
+    localStorage.setItem('email', user.email)
+    localStorage.setItem('token', token)
+   
   
      history.push('/posts')
     })
