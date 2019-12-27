@@ -1,5 +1,8 @@
 import React from "react";
 import HomePageNavbar from "../layout/homepageNavbar";
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { createUser } from '../../utils/api';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -16,11 +19,6 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-
-
-
-
-
 
 const SignUp = makeStyles({
   card: {
@@ -60,6 +58,21 @@ export default function OutlinedCard() {
   const classes = SignUp();
   //const bull = <span className={classes.bullet}>•</span>;
 
+
+  const [email, setEmail] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [password, setPassword] = useState('')
+  const history  = useHistory();
+  const handleSubmit = (e) =>{
+    e.preventDefault()
+
+    createUser({ fullName, email, password }).then(data => {
+      if(!data.error)
+        history.push('/login')
+        
+     
+     })
+     }
   const [values, setValues] = React.useState({
     amount: '',
     password: '',
@@ -96,7 +109,7 @@ export default function OutlinedCard() {
     <Card className={classes.card} variant="outlined">
     
       <CardContent>
-      <form className="form"  className={clsx(classes.margin, classes.withoutLabel, classes.textField)} Validate autoComplete="off" >
+      <form className="form" onSubmit={e => handleSubmit(e)}  className={clsx(classes.margin, classes.withoutLabel, classes.textField)} Validate autoComplete="off" >
       <h2 style={{textAlign:'center'}}>Sign Up</h2>
       <TextField
       className={clsx(classes.margin, classes.textField)}
@@ -105,6 +118,8 @@ export default function OutlinedCard() {
           placeholder="Full Name"
           multiline
           variant="outlined"
+          onChange={e => setFullName(e.target.value)}
+               value = {fullName}
           />
       
       
@@ -114,6 +129,8 @@ export default function OutlinedCard() {
           placeholder="Email"
           multiline
           variant="outlined"
+          value= {email}
+          onChange={e => setEmail(e.target.value)}
           />
   
 
@@ -124,10 +141,10 @@ export default function OutlinedCard() {
             //id="outlined-adornment-password"
             id="inputPassword3"
             type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-            onChange={handleChange('password')}
-            // value={userPassword}
-            // onChange={e => setUserPassword(e.target.value)}
+            // value={values.password}
+            // onChange={handleChange('password')}
+            value={password}
+               onChange={e => setPassword(e.target.value)}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
