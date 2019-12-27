@@ -32,10 +32,10 @@ export default function CenteredGrid() {
       <Grid item xs={12}>
           <Paper className={classes.paper}><HomePageNavbar /></Paper>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <Paper className={classes.paper}><SignIn /></Paper>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <Paper className={classes.paper}><SignUp /></Paper>
         </Grid>
       </Grid>

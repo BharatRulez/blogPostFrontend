@@ -1,4 +1,6 @@
 import React from 'react';
+import { useState } from 'react'
+import { createPost } from '../../../utils/api'
 import {fade, makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -26,6 +28,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
+import TextField from '@material-ui/core/TextField';
+import clsx from 'clsx';
 
 const useStyles = makeStyles (theme => ({
   card: {
@@ -39,7 +43,10 @@ const useStyles = makeStyles (theme => ({
 button : {
     float : "right",
     margin : "40px",
-    width : "20vw"
+    width : "200px",
+    alignItems: 'center',
+  justifyContent: 'center',
+    
 },
 modal: {
   display: 'flex',
@@ -52,7 +59,15 @@ paper: {
   boxShadow: theme.shadows[5],
   padding: theme.spacing(2, 4, 3),
 },
-
+margin: {
+  margin: '10px 0px 0px 0px',
+},
+withoutLabel: {
+  marginTop: '10px',
+},
+textField: {
+  width: 200,
+},
 grow: {
   flexGrow: 1,
 },
@@ -201,6 +216,7 @@ export default function ImgMediaCard() {
 
 
   const [open, setOpen] = React.useState(false);
+  const [copen, setcOpen] = React.useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -209,6 +225,15 @@ export default function ImgMediaCard() {
   const handleClose = () => {
     setOpen(false);
   };
+
+
+  const createOpen = () => {
+    setcOpen(true);
+  };
+
+  const createClose = () => {
+    setcOpen(false);
+  };
   const history = useHistory();
   const navigateToCreatePost = (e) =>{
     e.preventDefault()
@@ -216,6 +241,19 @@ export default function ImgMediaCard() {
         history.push('/posts/create')
     }
    
+    }
+
+  const [description, setDescription] = useState('')
+  const [title, setTitle] = useState('')
+  
+  const posthistory  = useHistory();
+  const handleSubmit = (e) =>{
+    e.preventDefault()
+    
+    createPost({ title, description }).then(data => {
+     if(!data.error)
+       posthistory.push('/posts')
+     })
     }
 return (
   <>
@@ -287,11 +325,89 @@ return (
     </div>
 
 <div className={classes.root}> 
-<Button className = {classes.button} variant="contained" color="primary" onClick={e => navigateToCreatePost(e)}>
+{/* <Button className = {classes.button} variant="contained" color="primary" onClick={e => navigateToCreatePost(e)}>
   Create a new post
-</Button>     
+</Button>      */}
+
+<Grid container spacing={20} style={{textAlign:'center'}}>
+<Button className={classes.button} variant="contained" color="primary" onClick={createOpen}>
+  Create a new post
+</Button> 
+</Grid>
+{/* <button type="button" onClick={handleOpen}>
+        react-transition-group
+      </button> */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={copen}
+        onClose={createClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={copen}>
+          <div className={classes.paper}>
+            {/* <h2 id="transition-modal-title">Transition modal</h2>
+            <p id="transition-modal-description">react-transition-group animates me.</p> */}
+
+            <form className="form" onSubmit={e => handleSubmit(e)} className={clsx(classes.margin, classes.withoutLabel, classes.textField)} Validate autoComplete="off">
+                    
+            <TextField
+            className={clsx(classes.margin, classes.textField)}
+          id="outlined-textarea"
+          label="Title"
+          placeholder="Title"
+          multiline
+          variant="outlined"
+          onChange={e => setTitle(e.target.value)}
+               value = {title}/>
+               
+            <TextField
+            className={clsx(classes.margin, classes.textField)}
+          id="outlined-textarea"
+          label="Description"
+          placeholder="Description"
+          multiline
+          variant="outlined"
+          value= {description}
+              onChange={e => setDescription(e.target.value)}/>
+
+                <Button
+                className={clsx(classes.margin, classes.textField)}
+            variant="contained"
+            component="label"
+            size="large"
+          >
+            Upload File
+            <input
+              type="file"
+              style={{ display: "none" }}
+            />
+          </Button>
+<Button className={clsx(classes.margin, classes.textField)} type="submit"  size="large"  variant="contained" color="primary" disableElevation>
+Create Post
+            </Button>
+            {/* <div className="form-group">
+              <button
+                type="submit"
+                className="btn btn-success btn-lg float-right"
+              >
+                Create Post
+              </button>
+            </div> */}
+          </form>
+          </div>
+        </Fade>
+      </Modal>
+
+
 <Grid container spacing={1}>
     <Grid container item xs={12} spacing={3}>
+  
     <Grid item xs={12} sm={4} >
 
      <Card className={classes.card} >
