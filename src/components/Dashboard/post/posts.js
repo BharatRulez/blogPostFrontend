@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { createPost } from '../../../utils/api'
 import {fade, makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -30,6 +30,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
 import clsx from 'clsx';
+import { getPosts } from "../../../utils/api"
 
 const useStyles = makeStyles (theme => ({
   card: {
@@ -217,6 +218,7 @@ export default function ImgMediaCard() {
 
   const [open, setOpen] = React.useState(false);
   const [copen, setcOpen] = React.useState(false);
+  const [postData, setPostData] = useState([])
 
   const handleOpen = () => {
     setOpen(true);
@@ -234,25 +236,35 @@ export default function ImgMediaCard() {
   const createClose = () => {
     setcOpen(false);
   };
-  const history = useHistory();
-  const navigateToCreatePost = (e) =>{
-    e.preventDefault()
-    if(e){
-        history.push('/posts/create')
-    }
-   
-    }
+  
 
   const [description, setDescription] = useState('')
   const [title, setTitle] = useState('')
+  useEffect(() => {
+    console.log(getPosts())
+    getPosts().then(data => {
+      setPostData(data.posts);
+      
+      
+    })
+   },[])
   
   const posthistory  = useHistory();
   const handleSubmit = (e) =>{
     e.preventDefault()
     
     createPost({ title, description }).then(data => {
-     if(!data.error)
-       posthistory.push('/posts')
+     if(!data.error){
+      createClose()
+      getPosts().then(data => {
+        setPostData(data.posts);
+        setDescription('');
+      setTitle('')
+        
+      })
+      posthistory.push('/posts')
+     }
+     
      })
     }
 return (
@@ -407,8 +419,9 @@ Create Post
 
 <Grid container spacing={1}>
     <Grid container item xs={12} spacing={3}>
-  
-    <Grid item xs={12} sm={4} >
+      {
+        postData.map(post => (
+          <Grid item xs={12} sm={4} >
 
      <Card className={classes.card} >
             <CardActionArea onClick={handleOpen}>
@@ -421,21 +434,20 @@ Create Post
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Lizard
+            {post.title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
+            {post.description}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        {/* <Button size="small" color="primary">
           Share
         </Button>
         <Button size="small" color="primary">
           Learn More
-        </Button>
+        </Button> */}
         <Button size="small" color="primary">
           Delete
         </Button>
@@ -472,11 +484,10 @@ Create Post
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Lizard
+            {post.title}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
+           {post.description}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -488,7 +499,12 @@ Create Post
       
     
    </Grid>
-   <Grid item xs={12} sm={4}>
+
+        ))
+      }
+  
+    
+   {/* <Grid item xs={12} sm={4}>
     <Card className={classes.card}>
       <CardActionArea>
         <CardMedia
@@ -598,16 +614,9 @@ Create Post
           </Typography>
         </CardContent>
       </CardActionArea>
-      {/* <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
-      </CardActions> */}
+     
     </Card>
-</Grid>
+</Grid> */}
 </Grid>
 </Grid>
 </div>

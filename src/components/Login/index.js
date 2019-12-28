@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { signInUser } from "../../utils/api";
 import HomePageNavbar from "../layout/homepageNavbar";
@@ -60,9 +60,10 @@ export default function OutlinedCard() {
 
 const handleSubmit = (e) =>{
   e.preventDefault()
+  console.log(e);
   
   signInUser({ userEmail, userPassword }).then(data => {
-    console.log(data);
+   
     const { token, user } = data
     localStorage.setItem('user_id', user._id)
     localStorage.setItem('email', user.email)
@@ -74,6 +75,7 @@ const handleSubmit = (e) =>{
   }
   const classes = Login();
   //const bull = <span className={classes.bullet}>•</span>;
+  useEffect(() => console.log(userEmail,userPassword), [userEmail,userPassword]);
 
   const [values, setValues] = React.useState({
     amount: '',

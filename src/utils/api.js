@@ -5,19 +5,26 @@ const baseURL = 'http://localhost:9000/api/v1'
 const signInUserURL = `${baseURL}/usersignin`
 const createUserURL = `${baseURL}/usersignup`
 const createPostURL = `${baseURL}/post`
+const postsURl = `${baseURL}/getallpost`
 
+
+
+
+const getToken = () => localStorage.getItem('token')
 const signInUser = user => {
+  console.log(user);
     return fetch(signInUserURL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        
       },
+      credentials: 'include',
       body: JSON.stringify({
         email: user.userEmail,
         password: user.userPassword
       })
-    })
-      .then(res => res.json())
+    }).then(res => res.json())
       .catch(e => console.log(e))
   }
 
@@ -36,10 +43,12 @@ const signInUser = user => {
   }
 
   const createPost = post => {
+    const token = getToken()
     return fetch(createPostURL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         title: post.title,
@@ -47,4 +56,16 @@ const signInUser = user => {
       })
     }).then(res => res.json())
   }
-  export {signInUser,createUser,createPost};
+
+
+  const getPosts = () =>{
+   return  fetch(postsURl, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getToken()}`
+      }
+    }).then(res => res.json())
+
+  }
+  
+  export {signInUser,createUser,createPost,getPosts};
