@@ -6,6 +6,7 @@ const signInUserURL = `${baseURL}/usersignin`
 const createUserURL = `${baseURL}/usersignup`
 const createPostURL = `${baseURL}/post`
 const postsURl = `${baseURL}/getallpost`
+const deletePostURL = `${baseURL}/deletePost`
 
 
 
@@ -67,5 +68,13 @@ const signInUser = user => {
     }).then(res => res.json())
 
   }
-  
-  export {signInUser,createUser,createPost,getPosts};
+
+  const deletePost = id =>
+  fetch(`${deletePostURL}/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getToken()}`
+    }
+  }).then(res => res.json())
+  export {signInUser,createUser,createPost,getPosts,deletePost};

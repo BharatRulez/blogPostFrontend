@@ -63,14 +63,17 @@ const handleSubmit = (e) =>{
   console.log(e);
   
   signInUser({ userEmail, userPassword }).then(data => {
-   
-    const { token, user } = data
+    if(!data.error){
+      const { token, user } = data
     localStorage.setItem('user_id', user._id)
     localStorage.setItem('email', user.email)
     localStorage.setItem('token', token)
+    history.push('/posts')
+   }else{
+     
+   }
    
-  
-     history.push('/posts')
+    
     })
   }
   const classes = Login();

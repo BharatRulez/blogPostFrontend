@@ -30,7 +30,15 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
 import clsx from 'clsx';
-import { getPosts } from "../../../utils/api"
+import { getPosts,deletePost } from "../../../utils/api"
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
+const getUserId = () => localStorage.getItem('user_id');
 
 const useStyles = makeStyles (theme => ({
   card: {
@@ -135,6 +143,8 @@ export default function ImgMediaCard() {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -183,7 +193,7 @@ export default function ImgMediaCard() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="secondary">
             <MailIcon />
@@ -198,7 +208,7 @@ export default function ImgMediaCard() {
           </Badge>
         </IconButton>
         <p>Notifications</p>
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
@@ -212,6 +222,47 @@ export default function ImgMediaCard() {
       </MenuItem>
     </Menu>
   );
+  // const [openDialog, setOpenDialog] = React.useState(false);
+  // const theme = useTheme();
+  // const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  // const handleClickOpenDialog = () => {
+  //   setOpenDialog(true);
+  // };
+
+  // const handleCloseDialog = () => {
+  //   setOpenDialog(false);
+  // };
+
+  // return (
+  //   <div>
+  //     <Button variant="outlined" color="primary" onClick={handleClickOpenDialog}>
+  //       Open responsive dialog
+  //     </Button>
+  //     <Dialog
+  //       fullScreen={fullScreen}
+  //       open={open}
+  //       onClose={handleCloseDialog}
+  //       aria-labelledby="responsive-dialog-title"
+  //     >
+  //       <DialogTitle id="responsive-dialog-title">{"Are you sure you want to delete?"}</DialogTitle>
+  //       <DialogContent>
+  //         <DialogContentText>
+  //           Let Google help apps determine location. This means sending anonymous location data to
+  //           Google, even when no apps are running.
+  //         </DialogContentText>
+  //       </DialogContent>
+  //       <DialogActions>
+  //         <Button autoFocus onClick={handleCloseDialog} color="primary">
+  //           Disagree
+  //         </Button>
+  //         <Button onClick={handleCloseDialog} color="primary" autoFocus>
+  //           Agree
+  //         </Button>
+  //       </DialogActions>
+  //     </Dialog>
+  //   </div>
+  // )
 
 
 
@@ -243,13 +294,56 @@ export default function ImgMediaCard() {
   useEffect(() => {
     console.log(getPosts())
     getPosts().then(data => {
-      setPostData(data.posts);
-      
-      
+      if(!data.error){
+        setPostData(data.posts);
+      }
+     
     })
    },[])
   
   const posthistory  = useHistory();
+  const deleteThePost = (userId,postId) =>{
+    let personId = getUserId();
+     if(userId === personId){
+     
+      deletePost(postId).then(data => {
+        if(!data.error){
+          setPostData(postData.filter(post => post._id !== postId))
+        }else{
+          console.log("Some error occured while deleting");
+        }
+      })
+     }else{
+       return(
+         <>
+        <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose} color="primary">
+            Disagree
+          </Button>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+      </>
+       )
+     }
+    
+   
+  }
   const handleSubmit = (e) =>{
     e.preventDefault()
     
@@ -260,8 +354,7 @@ export default function ImgMediaCard() {
         setPostData(data.posts);
         setDescription('');
       setTitle('')
-        
-      })
+       })
       posthistory.push('/posts')
      }
      
@@ -269,7 +362,7 @@ export default function ImgMediaCard() {
     }
 return (
   <>
-  <div className={classes.grow}>
+<div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -298,16 +391,19 @@ return (
           </div> */}
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
+            {/* <IconButton aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <MailIcon />
               </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
+            </IconButton> */}
+            {/* <IconButton aria-label="show 17 new notifications" color="inherit">
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
+             {/* <Button size="small" color="primary" >
+              Delete
+             </Button> */}
             <IconButton
               edge="end"
               aria-label="account of current user"
@@ -335,7 +431,6 @@ return (
       {renderMobileMenu}
       {renderMenu}
     </div>
-
 <div className={classes.root}> 
 {/* <Button className = {classes.button} variant="contained" color="primary" onClick={e => navigateToCreatePost(e)}>
   Create a new post
@@ -346,9 +441,7 @@ return (
   Create a new post
 </Button> 
 </Grid>
-{/* <button type="button" onClick={handleOpen}>
-        react-transition-group
-      </button> */}
+
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -388,7 +481,7 @@ return (
           value= {description}
               onChange={e => setDescription(e.target.value)}/>
 
-                <Button
+                {/* <Button
                 className={clsx(classes.margin, classes.textField)}
             variant="contained"
             component="label"
@@ -399,18 +492,11 @@ return (
               type="file"
               style={{ display: "none" }}
             />
-          </Button>
+          </Button> */}
 <Button className={clsx(classes.margin, classes.textField)} type="submit"  size="large"  variant="contained" color="primary" disableElevation>
 Create Post
             </Button>
-            {/* <div className="form-group">
-              <button
-                type="submit"
-                className="btn btn-success btn-lg float-right"
-              >
-                Create Post
-              </button>
-            </div> */}
+           
           </form>
           </div>
         </Fade>
@@ -423,7 +509,7 @@ Create Post
         postData.map(post => (
           <Grid item xs={12} sm={4} >
 
-     <Card className={classes.card} >
+     <Card className={classes.card} key={post._id} >
             <CardActionArea onClick={handleOpen}>
         <CardMedia
           component="img"
@@ -442,18 +528,11 @@ Create Post
         </CardContent>
       </CardActionArea>
       <CardActions>
-        {/* <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button> */}
-        <Button size="small" color="primary">
+       
+        <Button size="small" color="primary" onClick={() => deleteThePost(post.userId,post._id)}>
           Delete
         </Button>
-        {/* <IconButton aria-label="delete">
-        <DeleteIcon />
-      </IconButton> */}
+        
       </CardActions>
       </Card>
        
@@ -504,119 +583,7 @@ Create Post
       }
   
     
-   {/* <Grid item xs={12} sm={4}>
-    <Card className={classes.card}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          height="140"
-          image="https://www.w3schools.com/howto/img_mountains.jpg"
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Lizard
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
-      </CardActions>
-    </Card>
-    </Grid>
-    <Grid item xs={12} sm={4}>
-    <Card className={classes.card}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          height="140"
-          image="https://www.w3schools.com/howto/img_forest.jpg"
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Lizard
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
-      </CardActions>
-    </Card>
-    </Grid>
-    <Grid item xs={12} sm={4}>
-    <Card className={classes.card}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          height="140"
-          image="https://www.w3schools.com/howto/img_forest.jpg"
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Lizard
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button>
-      </CardActions>
-    </Card>
-    </Grid>
-    <Grid item xs={12} sm={4}>
-    <Card className={classes.card}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          alt="Contemplative Reptile"
-          height="140"
-          image="https://www.w3schools.com/howto/img_mountains.jpg"
-          title="Contemplative Reptile"
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Lizard
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-            across all continents except Antarctica
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-     
-    </Card>
-</Grid> */}
+  
 </Grid>
 </Grid>
 </div>
